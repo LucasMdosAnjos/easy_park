@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
               decoration: InputDecoration(labelText: 'Email'),
             ),
           ),
-          SizedBox(
+          SizedBox(     
             height: 10,
           ),
           Padding(
