@@ -11,104 +11,127 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<Login>with TickerProviderStateMixin{
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  AnimationController controller;
+  Animation<double> opacity;
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 3));
+        controller.forward();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
   @override
   Widget build(BuildContext context) {
+    opacity = Tween(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(
+            parent: controller, curve: Interval(0.0, 1.0, curve: Curves.ease)));
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1.0,
       ),
-      body: Builder(
-        builder: (BuildContext context) => SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'assets/icone.png',
-                          ),
-                          fit: BoxFit.contain)),
+      body: AnimatedBuilder(
+              animation: controller,
+              builder:(context,child)=> Opacity(
+                opacity: opacity.value,
+                              child: Builder(
+          builder: (BuildContext context) => SingleChildScrollView(
+            child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.35,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                image: AssetImage(
+                  'assets/icone.png',
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Widgets.caixaDeTexto(
-                'E-mail',
-                controllerEmail,
-                ImageIcon(
-                  AssetImage('assets/email.png'),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Widgets.caixaDeTexto(
-                  'Password',
-                  controllerPassword,
-                  ImageIcon(
-                    AssetImage('assets/password.png'),
-                  ),
-                  obs: true),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 15.0, top: 5.0),
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Forgot password?',
-                        style:
-                            TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
-                      )),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              InkWell(
-                  onTap: () {
-                    loginUser(context);
-                  },
-                  child: Image.asset(
-                    'assets/login.png',
-                    fit: BoxFit.contain,
-                  )),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Don\'t have an account?  ',
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      //Colocar aqui pra rederecionar para tela de cadasro
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => Cadastro()));
-                    },
-                    child: Text(
-                      'Sign up here',
-                      style: TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
+                fit: BoxFit.contain)),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Widgets.caixaDeTexto(
+                      'E-mail',
+                      controllerEmail,
+                      ImageIcon(
+                        AssetImage('assets/email.png'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Widgets.caixaDeTexto(
+                        'Password',
+                        controllerPassword,
+                        ImageIcon(
+                          AssetImage('assets/password.png'),
+                        ),
+                        obs: true),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 15.0, top: 5.0),
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Forgot password?',
+                              style:
+                  TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
+                            )),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    InkWell(
+                        onTap: () {
+                          loginUser(context);
+                        },
+                        child: Image.asset(
+                          'assets/login.png',
+                          fit: BoxFit.contain,
+                        )),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Don\'t have an account?  ',
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            //Colocar aqui pra rederecionar para tela de cadasro
+                            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => Cadastro()));
+                          },
+                          child: Text(
+                            'Sign up here',
+                            style: TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+            ),
           ),
         ),
+              ),
       ),
     );
   }

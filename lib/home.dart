@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Home'), centerTitle: true),
-      drawer: StreamBuilder<Event>(
+      drawer: _auth.currentUser!=null ? StreamBuilder<Event>(
           stream: FirebaseDatabase.instance
               .reference()
               .child('Users')
@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return Container();
                 }
             }
-          }),
+          }) : Container(),
       body: Container(),
     );
   }
