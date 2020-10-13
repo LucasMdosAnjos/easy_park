@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "863252314227",
+    "firebase_url": "https://parksystem-e4b75.firebaseio.com",
+    "project_id": "parksystem-e4b75",
+    "storage_bucket": "parksystem-e4b75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863252314227:android:d3dabe19d9f10e8c6c9206",
+        "android_client_info": {
+          "package_name": "com.vagas.easy_park"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863252314227-ebrotm4pce0ut80755moien0sghv7ni3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCzjAsxTPR6Gfh-4bJiw-xYjg4sDwC4bk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863252314227-ebrotm4pce0ut80755moien0sghv7ni3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "863252314227-9kd8va4l3ild01u8u3ou38bmp6o0c1kq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.dev.KevinRibeiro.EasyyyyyyyPark"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

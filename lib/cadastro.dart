@@ -1,26 +1,28 @@
-import 'package:easy_park/home.dart';
 import 'package:easy_park/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import 'cadastro.dart';
+import 'home.dart';
 
-class Login extends StatefulWidget {
+class Cadastro extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _CadastroState createState() => _CadastroState();
 }
 
-class _LoginState extends State<Login> {
+class _CadastroState extends State<Cadastro> {
   TextEditingController controllerEmail = TextEditingController();
+  TextEditingController controllerName = TextEditingController();
   TextEditingController controllerPassword = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseDatabase database = FirebaseDatabase.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text('Sign Up'),
+        centerTitle: true,
         elevation: 1.0,
       ),
       body: Builder(
@@ -40,6 +42,7 @@ class _LoginState extends State<Login> {
                           fit: BoxFit.contain)),
                 ),
               ),
+              Widgets.caixaDeTexto('Name', controllerName, null),
               SizedBox(
                 height: 10,
               ),
@@ -60,51 +63,19 @@ class _LoginState extends State<Login> {
                     AssetImage('assets/password.png'),
                   ),
                   obs: true),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 15.0, top: 5.0),
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        'Forgot password?',
-                        style:
-                            TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
-                      )),
-                ),
-              ),
               SizedBox(
                 height: 30,
               ),
               InkWell(
                   onTap: () {
-                    loginUser(context);
+                    createUser(context);
                   },
                   child: Image.asset(
-                    'assets/login.png',
+                    'assets/SignUp.png',
                     fit: BoxFit.contain,
                   )),
               SizedBox(
                 height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Don\'t have an account?  ',
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      //Colocar aqui pra rederecionar para tela de cadasro
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => Cadastro()));
-                    },
-                    child: Text(
-                      'Sign up here',
-                      style: TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -113,7 +84,11 @@ class _LoginState extends State<Login> {
     );
   }
 
-  loginUser(BuildContext context) async {
+  createUser(BuildContext context) async {
+    if (controllerName.text.isEmpty) {
+      Widgets.showDialog('Warning', 'Fill in with a valid name.', context);
+      return;
+    }
     if (controllerEmail.text.isEmpty) {
       Widgets.showDialog('Warning', 'Fill in with a valid email.', context);
       return;
@@ -122,22 +97,28 @@ class _LoginState extends State<Login> {
       Widgets.showDialog('Warning', 'Fill in with a valid password.', context);
       return;
     }
+
     try {
-      final User user = (await _auth.signInWithEmailAndPassword(
+      final User user = (await _auth.createUserWithEmailAndPassword(
         email: controllerEmail.text.trim(),
         password: controllerPassword.text.trim(),
       ))
           .user;
+      database
+          .reference()
+          .child('Users')
+          .child(user.uid)
+          .set({'name': controllerName.text, 'email': controllerEmail.text});
 
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("${user.email} signed in"),
+        content: Text("${user.email} created"),
       ));
       await Future.delayed(Duration(milliseconds: 1300));
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (_) => MyHomePage()), (route) => false);
     } catch (e) {
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Failed to sign in with Email & Password"),
+        content: Text("Failed to create user."),
       ));
     }
   }
