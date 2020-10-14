@@ -95,7 +95,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
               height: 25,
             ),
             InkWell(
-              onTap: salvar,
+              onTap: save,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.6,
                 alignment: Alignment.center,
@@ -104,7 +104,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                     color: Colors.blue.withOpacity(0.75),
                     borderRadius: BorderRadius.circular(15.0)),
                 child: Text(
-                  'SALVAR',
+                  'SAVE',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
@@ -115,7 +115,7 @@ class _PaymentMethodsState extends State<PaymentMethods> {
     );
   }
 
-  salvar() {
+  save() {
     if (controllerNumber.text.isEmpty) {
       Widgets.showDialog('Warning', 'Fill in with a valid number.', context);
       return;
