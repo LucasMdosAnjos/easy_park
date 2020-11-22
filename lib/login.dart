@@ -75,7 +75,7 @@ class _LoginState extends State<Login>with TickerProviderStateMixin{
                       height: 10,
                     ),
                     Widgets.caixaDeTexto(
-                        'Password',
+                        'Senha',
                         controllerPassword,
                         ImageIcon(
                           AssetImage('assets/password.png'),
@@ -88,7 +88,7 @@ class _LoginState extends State<Login>with TickerProviderStateMixin{
                         child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              'Forgot password?',
+                              'Esqueceu a senha?',
                               style:
                   TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
                             )),
@@ -112,7 +112,7 @@ class _LoginState extends State<Login>with TickerProviderStateMixin{
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Don\'t have an account?  ',
+                          'Não possui uma conta?  ',
                         ),
                         GestureDetector(
                           onTap: () {
@@ -121,7 +121,7 @@ class _LoginState extends State<Login>with TickerProviderStateMixin{
                 MaterialPageRoute(builder: (_) => Cadastro()));
                           },
                           child: Text(
-                            'Sign up here',
+                            'Cadastre-se aqui',
                             style: TextStyle(color: Color.fromRGBO(70, 151, 156, 1)),
                           ),
                         ),

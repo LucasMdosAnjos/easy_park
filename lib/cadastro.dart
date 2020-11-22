@@ -21,7 +21,8 @@ class _CadastroState extends State<Cadastro> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Sign Up'),
+        title: Text('Cadastro'),
+        backgroundColor: Color.fromRGBO(9, 174, 181, 1),
         centerTitle: true,
         elevation: 1.0,
       ),
@@ -42,7 +43,7 @@ class _CadastroState extends State<Cadastro> {
                           fit: BoxFit.contain)),
                 ),
               ),
-              Widgets.caixaDeTexto('Name', controllerName, null),
+              Widgets.caixaDeTexto('Nome', controllerName, null),
               SizedBox(
                 height: 10,
               ),
@@ -57,7 +58,7 @@ class _CadastroState extends State<Cadastro> {
                 height: 10,
               ),
               Widgets.caixaDeTexto(
-                  'Password',
+                  'Senha',
                   controllerPassword,
                   ImageIcon(
                     AssetImage('assets/password.png'),

@@ -1,13 +1,19 @@
-import 'package:easy_park/widgets.dart';
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'dart:convert';
-
 import 'package:toast/toast.dart';
 
+import 'package:easy_park/widgets.dart';
+
 class PaymentMethods extends StatefulWidget {
+  final bool isPayment;
+  const PaymentMethods({
+    Key key,
+    this.isPayment = false,
+  }) : super(key: key);
   @override
   _PaymentMethodsState createState() => _PaymentMethodsState();
 }
@@ -23,23 +29,33 @@ class _PaymentMethodsState extends State<PaymentMethods> {
   @override
   void initState() {
     super.initState();
-    database.reference().child('Users').child(_auth.currentUser.uid).once().then((value){
-      if(value.value['credit_card']!=null){
+    database
+        .reference()
+        .child('Users')
+        .child(_auth.currentUser.uid)
+        .once()
+        .then((value) {
+      if (value.value['credit_card'] != null) {
         setState(() {
           controllerName.text = value.value['credit_card']['name'].toString();
-          controllerDate.text = value.value['credit_card']['expire_date'].toString();
-          controllerNumber.text= value.value['credit_card']['number'].toString();
-          controllerCvv.text = utf8.decode(base64Url.decode(value.value['credit_card']['cvv'].toString()));  
+          controllerDate.text =
+              value.value['credit_card']['expire_date'].toString();
+          controllerNumber.text =
+              value.value['credit_card']['number'].toString();
+          controllerCvv.text = utf8.decode(
+              base64Url.decode(value.value['credit_card']['cvv'].toString()));
         });
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Credit Card'),
+        title: Text('Cartão de Crédito'),
         centerTitle: true,
+        backgroundColor: Color.fromRGBO(9, 174, 181, 1),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -57,22 +73,22 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Widgets.caixaDeTextoPagamento(
-                          'Number', controllerNumber, TextInputType.number),
+                          'Número', controllerNumber, TextInputType.number),
                       SizedBox(
                         height: 10,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.85,
                         child: Widgets.caixaDeTextoPagamento(
-                            'Name', controllerName, TextInputType.text),
+                            'Nome', controllerName, TextInputType.text),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.7,
-                        child: Widgets.caixaDeTextoPagamento('Expire Date',
-                            controllerDate, TextInputType.number),
+                        child: Widgets.caixaDeTextoPagamento(
+                            'Data', controllerDate, TextInputType.number),
                       ),
                       SizedBox(
                         height: 10,
@@ -101,14 +117,21 @@ class _PaymentMethodsState extends State<PaymentMethods> {
                 alignment: Alignment.center,
                 height: 45,
                 decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.75),
+                    color: Color.fromRGBO(9, 174, 181, 1),
                     borderRadius: BorderRadius.circular(15.0)),
                 child: Text(
-                  'SAVE',
+                  'SALVAR',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               ),
             ),
+            SizedBox(
+              height: 25,
+            ),
+            Text(
+              'Estes dados serão utilizados na hora do pagamento do Estacionamento.',
+              textAlign: TextAlign.center,
+            )
           ],
         ),
       ),
@@ -117,20 +140,19 @@ class _PaymentMethodsState extends State<PaymentMethods> {
 
   save() {
     if (controllerNumber.text.isEmpty) {
-      Widgets.showDialog('Warning', 'Fill in with a valid number.', context);
+      Widgets.showDialog('Aviso', 'Preencha com um número válido.', context);
       return;
     }
     if (controllerName.text.isEmpty) {
-      Widgets.showDialog('Warning', 'Fill in with a valid name.', context);
+      Widgets.showDialog('Aviso', 'Preencha com um nome válido.', context);
       return;
     }
     if (controllerDate.text.isEmpty) {
-      Widgets.showDialog(
-          'Warning', 'Fill in with a valid expire date.', context);
+      Widgets.showDialog('Aviso', 'Preencha com uma data válida.', context);
       return;
     }
     if (controllerCvv.text.isEmpty) {
-      Widgets.showDialog('Warning', 'Fill in with a valid cvv.', context);
+      Widgets.showDialog('Aviso', 'Preencha com um CVV válido', context);
       return;
     }
     database
@@ -143,10 +165,14 @@ class _PaymentMethodsState extends State<PaymentMethods> {
       'expire_date': controllerDate.text,
       'number': controllerNumber.text,
       'cvv': base64Url.encode(utf8.encode(controllerCvv.text))
-    }).then((value){
-      Toast.show('Saved', context,duration: Toast.LENGTH_LONG);
-      Navigator.pop(context);
-      Navigator.pop(context);
+    }).then((value) {
+      Toast.show('Salvo', context, duration: Toast.LENGTH_LONG);
+      if (widget.isPayment) {
+        Navigator.pop(context);
+      } else {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
     });
   }
 }
