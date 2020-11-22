@@ -82,7 +82,15 @@ class _LoginState extends State<Login>with TickerProviderStateMixin{
                         ),
                         obs: true),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        if(controllerEmail.text.isEmpty){
+                          Widgets.showDialog('Aviso', 'O Email digitado é inválido.', context);
+                          return;
+                        }
+                        _auth.sendPasswordResetEmail(email: controllerEmail.text).then((value){
+                          Widgets.showDialog('Aviso', 'Um email de recuperação de senha foi enviado.', context);
+                        });
+                      },
                       child: Padding(
                         padding: const EdgeInsets.only(right: 15.0, top: 5.0),
                         child: Align(
@@ -138,11 +146,11 @@ class _LoginState extends State<Login>with TickerProviderStateMixin{
 
   loginUser(BuildContext context) async {
     if (controllerEmail.text.isEmpty) {
-      Widgets.showDialog('Warning', 'Fill in with a valid email.', context);
+      Widgets.showDialog('Aviso', 'Preencha com um e-mail válido.', context);
       return;
     }
     if (controllerPassword.text.isEmpty) {
-      Widgets.showDialog('Warning', 'Fill in with a valid password.', context);
+      Widgets.showDialog('Aviso', 'Preencha uma senha válida.', context);
       return;
     }
     try {
@@ -160,7 +168,7 @@ class _LoginState extends State<Login>with TickerProviderStateMixin{
           MaterialPageRoute(builder: (_) => MyHomePage()), (route) => false);
     } catch (e) {
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Failed to sign in with Email & Password"),
+        content: Text("Falha ao realizar Login"),
       ));
     }
   }
